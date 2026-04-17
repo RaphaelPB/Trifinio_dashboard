@@ -53,6 +53,13 @@ gdf["geometry"] = gdf.geometry.make_valid()
 # Optional: dissolve multipart artifacts back by basin id
 gdf = gdf.dissolve(by=basin_id, as_index=False)
 
+# Project to metric CRS
+gdf_m = gdf.to_crs(3857)   # meters
+# shrink polygons inward by 5 meters
+gdf_m["geometry"] = gdf_m.buffer(-25)
+# back to WGS84
+gdf_m = gdf_m.to_crs(4326)
+
 # == SAve hydrotlas ==
 gdf.to_file(hydroatlas_path)
 
